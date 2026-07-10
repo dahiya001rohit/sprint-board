@@ -15,9 +15,8 @@ const STATUS_DOT: Record<Status, string> = {
 };
 
 export function Column({ status, label, tasks }: ColumnProps) {
-  // min-h keeps the three tracks tall so the board owns the viewport even when sparse.
   return (
-    <section aria-label={label} className="flex min-h-[65vh] flex-col gap-2 border border-line bg-panel p-3">
+    <section aria-label={label} className="flex flex-col gap-2 border border-line bg-panel p-3">
       <h2 className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-dim">
         <span aria-hidden="true" className={`size-1.5 ${STATUS_DOT[status]}`} />
         {label}
