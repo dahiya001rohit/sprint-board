@@ -27,7 +27,8 @@ function BoardApp() {
   return (
     <main className="mx-auto flex max-w-6xl flex-col gap-5 p-4 md:p-6">
       <header className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold tracking-tight">Sprint Board</h1>
+        {/* display font: Bebas Neue is naturally all-caps — sized up, spaced out */}
+        <h1 className="font-display text-2xl tracking-wide">Sprint Board</h1>
         <button
           type="button"
           onClick={() => dialogRef.current?.showModal()}

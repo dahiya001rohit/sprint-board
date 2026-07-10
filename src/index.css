@@ -3,7 +3,8 @@
 /* Design tokens — Tailwind v4 turns each --color-* into utilities (bg-canvas, border-line, …).
    Single dark theme, Linear-inspired: near-black canvas, layered panels, one indigo accent. */
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Roboto Condensed", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bebas Neue", ui-sans-serif, sans-serif; /* headings — used via font-display utility */
 
   --color-canvas: #09090b; /* app background */
   --color-panel: #131316; /* columns, dialogs */
