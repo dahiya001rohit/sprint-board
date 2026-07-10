@@ -1,75 +1,45 @@
-# React + TypeScript + Vite
+# Sprint Board
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small team task board — three columns (To Do / In Progress / Done), add/edit/delete tasks, move between columns, combined priority + assignee filters, debounced title search, and localStorage persistence.
 
-Currently, two official plugins are available:
+**Live:** https://sprint-board-ruby.vercel.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Built for the Narix Labs frontend intern assignment. The task shape (`status: todo | in_progress | done`, `priority: low | medium | high`) mirrors a REST API I built separately ([sprint-board-api](https://github.com/dahiya001rohit/sprint-board-api)) — this app doesn't call it, per the brief (jsonplaceholder seed + localStorage), but the two share one contract.
 
-## React Compiler
+## Run locally
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev      # http://localhost:5173
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+`npm run build` type-checks and produces the production bundle.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Stack
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Vite + React 19 + TypeScript, Tailwind CSS v4. No component or state libraries.
 
-```
+## Decisions
+
+**1. `useReducer` + Context as the single source of truth.**
+The only stored state is `{ tasks: Task[] }`. Everything else — filtered lists, per-column slices, live counts, the assignee dropdown options — is computed at render time from that array. Counts can't go stale because they're never stored. All five mutations (seed/add/edit/delete/move) live in one pure reducer, so the logic is testable without React and components just announce events.
+
+**2. Filters and search are view state, not board state.**
+They live in `useState` at the App level and are applied through pure functions (`utils/filterTasks.ts`). The search input updates instantly but filtering reads a debounced copy (custom `useDebounce`, 300ms) — debounce the consumer, not the input.
+
+**3. Native `<dialog>` for add/edit/delete-confirm popups.**
+`showModal()` gives focus trapping, Esc-to-close, and a `::backdrop` for free — no modal library, and keyboard/screen-reader behavior is correct by default.
+
+**4. Seeding runs only on a truly first visit.**
+The provider captures whether localStorage was empty *at startup*. Checking `tasks.length === 0` instead would re-seed after a user deletes all their tasks. On fetch failure the board stays empty and fully usable, with a dismissible error banner. Seed priorities/assignees derive from each todo's id (modulo), so they're deterministic — never random on render.
+
+## Edge cases handled
+
+Empty board and empty columns, long unbroken titles (flex `min-w-0` + `break-words`), duplicate assignee names (deduped via `Set` for the filter), failed seed fetch, corrupt localStorage JSON (falls back to empty), 80-char title cap enforced on both the form and API data.
+
+## With more time
+
+- **Undo last action** — the reducer makes this cheap (keep previous state, add an `UNDO` action); it would also replace the delete-confirm dialog.
+- **Tests** — `filterTasks` and `boardReducer` are pure functions, written to be tested; Vitest cases for combined filters and edge inputs would be first.
+- **Swap localStorage for my sprint-board-api** so boards are shared between users.
+- Native HTML5 drag-and-drop on top of the move dropdown (keeping the dropdown as the accessible fallback).
