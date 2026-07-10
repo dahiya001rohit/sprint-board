@@ -9,6 +9,10 @@ interface TaskFormProps {
 
 const EMPTY = { title: "", description: "", priority: "medium" as Priority, assignee: "" };
 
+// Shared field styles — one const instead of repeating the string on every input.
+const FIELD = "border border-line bg-canvas px-2 py-1.5 text-[13px] text-ink focus:border-accent focus:outline-none";
+const LABEL = "text-[11px] font-medium text-dim";
+
 export function TaskForm({ task, onClose }: TaskFormProps) {
   const { dispatch } = useBoard();
   const id = useId(); // unique label/input ids — the form can exist multiple times on screen
@@ -46,34 +50,40 @@ export function TaskForm({ task, onClose }: TaskFormProps) {
         e.preventDefault();
         handleSubmit();
       }}
-      className="flex flex-col gap-2 text-sm"
+      className="flex flex-col gap-2"
     >
-      <label htmlFor={`${id}-title`}>Title *</label>
+      <label htmlFor={`${id}-title`} className={LABEL}>
+        Title *
+      </label>
       <input
         id={`${id}-title`}
         value={draft.title}
         onChange={(e) => setDraft({ ...draft, title: e.target.value })}
         maxLength={80} // hard cap from the brief, enforced natively
-        className="rounded border px-2 py-1"
+        className={FIELD}
       />
-      {error && <p className="text-red-600">{error}</p>}
+      {error && <p className="text-xs text-red-400">{error}</p>}
 
-      <label htmlFor={`${id}-desc`}>Description</label>
+      <label htmlFor={`${id}-desc`} className={LABEL}>
+        Description
+      </label>
       <textarea
         id={`${id}-desc`}
         value={draft.description}
         onChange={(e) => setDraft({ ...draft, description: e.target.value })}
         rows={2}
-        className="rounded border px-2 py-1"
+        className={FIELD}
       />
 
-      <label htmlFor={`${id}-priority`}>Priority</label>
+      <label htmlFor={`${id}-priority`} className={LABEL}>
+        Priority
+      </label>
       {/* select values are plain strings; the assertion is safe because options only contain priorities */}
       <select
         id={`${id}-priority`}
         value={draft.priority}
         onChange={(e) => setDraft({ ...draft, priority: e.target.value as Priority })}
-        className="rounded border px-2 py-1"
+        className={FIELD}
       >
         {PRIORITIES.map((p) => (
           <option key={p} value={p}>
@@ -82,20 +92,26 @@ export function TaskForm({ task, onClose }: TaskFormProps) {
         ))}
       </select>
 
-      <label htmlFor={`${id}-assignee`}>Assignee</label>
+      <label htmlFor={`${id}-assignee`} className={LABEL}>
+        Assignee
+      </label>
       <input
         id={`${id}-assignee`}
         value={draft.assignee}
         onChange={(e) => setDraft({ ...draft, assignee: e.target.value })}
-        className="rounded border px-2 py-1"
+        className={FIELD}
       />
 
-      <div className="flex gap-2">
-        <button type="submit" className="rounded bg-blue-600 px-3 py-1 text-white">
+      <div className="mt-2 flex gap-2">
+        <button type="submit" className="bg-accent px-3 py-1.5 text-[13px] font-medium text-white hover:opacity-90">
           {task ? "Save" : "Add task"}
         </button>
         {onClose && (
-          <button type="button" onClick={onClose} className="rounded border px-3 py-1">
+          <button
+            type="button"
+            onClick={onClose}
+            className="border border-line px-3 py-1.5 text-[13px] text-dim hover:text-ink"
+          >
             Cancel
           </button>
         )}

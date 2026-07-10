@@ -8,30 +8,38 @@ interface FilterBarProps {
   onChange: (next: Filters) => void; // App owns the state; bar only reports changes
 }
 
+// Shared field styles, matching TaskForm's inputs.
+const FIELD = "border border-line bg-canvas px-2 py-1.5 text-[13px] text-ink focus:border-accent focus:outline-none";
+const LABEL = "text-[11px] font-medium text-dim";
+
 export function FilterBar({ filters, assignees, onChange }: FilterBarProps) {
   const id = useId();
 
   return (
-    <div className="flex flex-col gap-2 text-sm sm:flex-row sm:items-end">
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
       <div className="flex flex-1 flex-col gap-1">
-        <label htmlFor={`${id}-search`}>Search title</label>
+        <label htmlFor={`${id}-search`} className={LABEL}>
+          Search title
+        </label>
         <input
           id={`${id}-search`}
           type="search"
           value={filters.search}
           onChange={(e) => onChange({ ...filters, search: e.target.value })}
           placeholder="Type to search…"
-          className="rounded border px-2 py-1"
+          className={FIELD}
         />
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor={`${id}-priority`}>Priority</label>
+        <label htmlFor={`${id}-priority`} className={LABEL}>
+          Priority
+        </label>
         <select
           id={`${id}-priority`}
           value={filters.priority}
           onChange={(e) => onChange({ ...filters, priority: e.target.value as Priority | "all" })}
-          className="rounded border px-2 py-1"
+          className={FIELD}
         >
           <option value="all">All</option>
           {PRIORITIES.map((p) => (
@@ -43,12 +51,14 @@ export function FilterBar({ filters, assignees, onChange }: FilterBarProps) {
       </div>
 
       <div className="flex flex-col gap-1">
-        <label htmlFor={`${id}-assignee`}>Assignee</label>
+        <label htmlFor={`${id}-assignee`} className={LABEL}>
+          Assignee
+        </label>
         <select
           id={`${id}-assignee`}
           value={filters.assignee}
           onChange={(e) => onChange({ ...filters, assignee: e.target.value })}
-          className="rounded border px-2 py-1"
+          className={FIELD}
         >
           <option value="all">All</option>
           {assignees.map((a) => (

@@ -25,13 +25,13 @@ function BoardApp() {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   return (
-    <main className="mx-auto flex max-w-5xl flex-col gap-4 p-4">
+    <main className="mx-auto flex max-w-6xl flex-col gap-5 p-4 md:p-6">
       <header className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">Sprint Board</h1>
+        <h1 className="text-lg font-semibold tracking-tight">Sprint Board</h1>
         <button
           type="button"
           onClick={() => dialogRef.current?.showModal()}
-          className="rounded bg-blue-600 px-3 py-1 text-sm text-white"
+          className="bg-accent px-3 py-1.5 text-[13px] font-medium text-white hover:opacity-90"
         >
           Add task
         </button>
@@ -40,14 +40,17 @@ function BoardApp() {
       {error && <ErrorBanner message={error} onDismiss={dismissError} />}
 
       {/* showModal() gives focus trap, Esc-to-close and ::backdrop for free */}
-      <dialog ref={dialogRef} className="m-auto w-full max-w-sm rounded-lg p-4 backdrop:bg-black/40">
-        <h2 className="mb-2 text-sm font-semibold">New task</h2>
+      <dialog
+        ref={dialogRef}
+        className="m-auto w-full max-w-sm border border-line bg-panel p-4 text-ink backdrop:bg-black/60 backdrop:backdrop-blur-[2px]"
+      >
+        <h2 className="mb-3 text-sm font-semibold tracking-tight">New task</h2>
         <TaskForm onClose={() => dialogRef.current?.close()} />
       </dialog>
 
       <FilterBar filters={filters} assignees={uniqueAssignees(state.tasks)} onChange={setFilters} />
 
-      {loading ? <p className="text-sm text-gray-500">Loading sample tasks…</p> : <Board tasks={visible} />}
+      {loading ? <p className="text-[13px] text-dim">Loading sample tasks…</p> : <Board tasks={visible} />}
     </main>
   );
 }

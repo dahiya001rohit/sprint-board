@@ -8,15 +8,16 @@ interface ColumnProps {
 
 export function Column({ label, tasks }: ColumnProps) {
   return (
-    <section aria-label={label} className="flex flex-col gap-2 rounded-lg bg-gray-100 p-3">
-      <h2 className="flex items-center justify-between text-sm font-semibold">
+    <section aria-label={label} className="flex flex-col gap-2 border border-line bg-panel p-3">
+      {/* Linear-style column header: 11px uppercase label, count beside it */}
+      <h2 className="flex items-baseline gap-2 text-[11px] font-medium uppercase tracking-wider text-dim">
         {label}
         {/* live count: derived from props on every render — never stored anywhere */}
-        <span className="rounded-full bg-gray-200 px-2 py-0.5 text-xs">{tasks.length}</span>
+        <span className="font-normal">{tasks.length}</span>
       </h2>
 
       {tasks.length === 0 ? (
-        <p className="py-4 text-center text-sm text-gray-500">No tasks</p>
+        <p className="border border-dashed border-line py-6 text-center text-[13px] text-dim">No tasks</p>
       ) : (
         <ul className="flex flex-col gap-2">
           {tasks.map((t) => (
