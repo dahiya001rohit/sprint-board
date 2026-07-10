@@ -1,6 +1,6 @@
 # Sprint Board
 
-A small team task board — three columns (To Do / In Progress / Done), add/edit/delete tasks, move between columns, combined priority + assignee filters, debounced title search, and localStorage persistence.
+A small team task board — three columns (To Do / In Progress / Done), add/edit/delete tasks, move between columns, combined priority + assignee filters, debounced title search, and localStorage persistence. Press **N** anywhere to open the add-task dialog.
 
 **Live:** https://sprint-board-ruby.vercel.app
 
@@ -14,6 +14,7 @@ npm run dev      # http://localhost:5173
 ```
 
 `npm run build` type-checks and produces the production bundle.
+`npm test` runs the Vitest suite for the filter/search logic.
 
 ## Stack
 
@@ -39,7 +40,7 @@ Empty board and empty columns, long unbroken titles (flex `min-w-0` + `break-wor
 
 ## With more time
 
-- **Undo last action** — the reducer makes this cheap (keep previous state, add an `UNDO` action); it would also replace the delete-confirm dialog.
-- **Tests** — `filterTasks` and `boardReducer` are pure functions, written to be tested; Vitest cases for combined filters and edge inputs would be first.
+- **Undo last action** — the reducer makes this cheap (keep previous state, add an `UNDO` action); it could then replace the delete-confirm dialog.
+- **More tests** — the filter/search logic is covered; `boardReducer` is pure and would be next.
 - **Swap localStorage for my sprint-board-api** so boards are shared between users.
 - Native HTML5 drag-and-drop on top of the move dropdown (keeping the dropdown as the accessible fallback).
