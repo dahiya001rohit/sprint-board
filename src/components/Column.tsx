@@ -1,16 +1,25 @@
-import type { Task } from "../types/task";
+import type { Status, Task } from "../types/task";
 import { TaskCard } from "./TaskCard";
 
 interface ColumnProps {
+  status: Status;
   label: string;
   tasks: Task[]; // already filtered to this column's status by Board
 }
 
-export function Column({ label, tasks }: ColumnProps) {
+// Status dot per column, Linear-style: gray = todo, yellow = active, green = done.
+const STATUS_DOT: Record<Status, string> = {
+  todo: "bg-zinc-500",
+  in_progress: "bg-yellow-400",
+  done: "bg-green-500",
+};
+
+export function Column({ status, label, tasks }: ColumnProps) {
+  // min-h keeps the three tracks tall so the board owns the viewport even when sparse.
   return (
-    <section aria-label={label} className="flex flex-col gap-2 border border-line bg-panel p-3">
-      {/* Linear-style column header: 11px uppercase label, count beside it */}
-      <h2 className="flex items-baseline gap-2 text-[11px] font-medium uppercase tracking-wider text-dim">
+    <section aria-label={label} className="flex min-h-[65vh] flex-col gap-2 border border-line bg-panel p-3">
+      <h2 className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wider text-dim">
+        <span aria-hidden="true" className={`size-1.5 ${STATUS_DOT[status]}`} />
         {label}
         {/* live count: derived from props on every render — never stored anywhere */}
         <span className="font-normal">{tasks.length}</span>

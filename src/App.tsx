@@ -24,8 +24,9 @@ function BoardApp() {
   // no React state and no re-render needed to toggle it.
   const dialogRef = useRef<HTMLDialogElement>(null);
 
+  // Container: ~90% of wide screens (capped at 1600px), full width with padding on small ones.
   return (
-    <main className="mx-auto flex max-w-6xl flex-col gap-5 p-4 md:p-6">
+    <main className="mx-auto flex w-full max-w-[1600px] flex-col gap-5 p-4 md:p-8">
       <header className="flex items-center justify-between">
         {/* display font: Bebas Neue is naturally all-caps — sized up, spaced out */}
         <h1 className="font-display text-2xl tracking-wide">Sprint Board</h1>

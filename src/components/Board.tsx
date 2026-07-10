@@ -7,7 +7,7 @@ export function Board({ tasks }: { tasks: Task[] }) {
   return (
     <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
       {STATUSES.map((s) => (
-        <Column key={s.value} label={s.label} tasks={tasks.filter((t) => t.status === s.value)} />
+        <Column key={s.value} status={s.value} label={s.label} tasks={tasks.filter((t) => t.status === s.value)} />
       ))}
     </div>
   );
