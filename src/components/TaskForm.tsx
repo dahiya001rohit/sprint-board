@@ -10,8 +10,8 @@ interface TaskFormProps {
 const EMPTY = { title: "", description: "", priority: "medium" as Priority, assignee: "" };
 
 // Shared field styles — one const instead of repeating the string on every input.
-const FIELD = "border border-line bg-canvas px-2 py-1.5 text-[13px] text-ink focus:border-accent focus:outline-none";
-const LABEL = "text-[11px] font-medium text-dim";
+const FIELD = "border border-line bg-canvas px-2 py-1.5 text-sm text-ink focus:border-accent focus:outline-none";
+const LABEL = "text-xs font-medium text-dim";
 
 export function TaskForm({ task, onClose }: TaskFormProps) {
   const { dispatch } = useBoard();
@@ -62,7 +62,7 @@ export function TaskForm({ task, onClose }: TaskFormProps) {
         maxLength={80} // hard cap from the brief, enforced natively
         className={FIELD}
       />
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <p className="text-[13px] text-red-400">{error}</p>}
 
       <label htmlFor={`${id}-desc`} className={LABEL}>
         Description
@@ -103,14 +103,14 @@ export function TaskForm({ task, onClose }: TaskFormProps) {
       />
 
       <div className="mt-2 flex gap-2">
-        <button type="submit" className="bg-accent px-3 py-1.5 text-[13px] font-medium text-white hover:opacity-90">
+        <button type="submit" className="bg-accent px-3 py-1.5 text-sm font-medium text-white hover:opacity-90">
           {task ? "Save" : "Add task"}
         </button>
         {onClose && (
           <button
             type="button"
             onClick={onClose}
-            className="border border-line px-3 py-1.5 text-[13px] text-dim hover:text-ink"
+            className="border border-line px-3 py-1.5 text-sm text-dim hover:text-ink"
           >
             Cancel
           </button>

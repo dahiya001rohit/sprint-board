@@ -9,7 +9,7 @@ export function ErrorBanner({ message, onDismiss }: ErrorBannerProps) {
   return (
     <div
       role="alert"
-      className="flex items-center justify-between gap-2 border border-red-900 bg-red-950/60 px-3 py-2 text-[13px] text-red-300"
+      className="flex items-center justify-between gap-2 border border-red-900 bg-red-950/60 px-3 py-2 text-sm text-red-300"
     >
       <p>{message}</p>
       <button type="button" onClick={onDismiss} aria-label="Dismiss error" className="hover:text-red-100">

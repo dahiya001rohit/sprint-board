@@ -9,8 +9,8 @@ interface FilterBarProps {
 }
 
 // Shared field styles, matching TaskForm's inputs.
-const FIELD = "border border-line bg-canvas px-2 py-1.5 text-[13px] text-ink focus:border-accent focus:outline-none";
-const LABEL = "text-[11px] font-medium text-dim";
+const FIELD = "border border-line bg-canvas px-2 py-1.5 text-sm text-ink focus:border-accent focus:outline-none";
+const LABEL = "text-xs font-medium text-dim";
 
 export function FilterBar({ filters, assignees, onChange }: FilterBarProps) {
   const id = useId();

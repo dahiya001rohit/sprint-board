@@ -29,11 +29,11 @@ function BoardApp() {
     <main className="mx-auto flex w-full max-w-[1600px] flex-col gap-5 p-4 md:p-8">
       <header className="flex items-center justify-between">
         {/* display font: Bebas Neue is naturally all-caps — sized up, spaced out */}
-        <h1 className="font-display text-2xl tracking-wide">Sprint Board</h1>
+        <h1 className="font-display text-3xl tracking-wide">Sprint Board</h1>
         <button
           type="button"
           onClick={() => dialogRef.current?.showModal()}
-          className="bg-accent px-3 py-1.5 text-[13px] font-medium text-white hover:opacity-90"
+          className="bg-accent px-3 py-1.5 text-sm font-medium text-white hover:opacity-90"
         >
           Add task
         </button>
@@ -46,13 +46,13 @@ function BoardApp() {
         ref={dialogRef}
         className="m-auto w-full max-w-sm border border-line bg-panel p-4 text-ink backdrop:bg-black/60 backdrop:backdrop-blur-[2px]"
       >
-        <h2 className="mb-3 text-sm font-semibold tracking-tight">New task</h2>
+        <h2 className="mb-3 text-base font-semibold tracking-tight">New task</h2>
         <TaskForm onClose={() => dialogRef.current?.close()} />
       </dialog>
 
       <FilterBar filters={filters} assignees={uniqueAssignees(state.tasks)} onChange={setFilters} />
 
-      {loading ? <p className="text-[13px] text-dim">Loading sample tasks…</p> : <Board tasks={visible} />}
+      {loading ? <p className="text-sm text-dim">Loading sample tasks…</p> : <Board tasks={visible} />}
     </main>
   );
 }

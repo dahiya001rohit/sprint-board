@@ -28,11 +28,11 @@ export function TaskCard({ task }: { task: Task }) {
   return (
     <li className="flex flex-col gap-2 border border-line bg-card p-3 transition-colors hover:border-line-bright">
       {/* min-w-0 lets the title shrink inside flex so break-words can wrap long titles */}
-      <h3 className="min-w-0 break-words text-[13px] font-medium leading-snug">{task.title}</h3>
+      <h3 className="min-w-0 break-words text-sm font-medium leading-snug">{task.title}</h3>
 
-      {task.description && <p className="break-words text-xs text-dim">{task.description}</p>}
+      {task.description && <p className="break-words text-[13px] text-dim">{task.description}</p>}
 
-      <div className="flex items-center gap-2 text-[11px] text-dim">
+      <div className="flex items-center gap-2 text-xs text-dim">
         <span aria-hidden="true" className={`size-1.5 shrink-0 ${PRIORITY_DOT[task.priority]}`} />
         {task.priority}
         {task.assignee && <span className="truncate">· @{task.assignee}</span>}
@@ -47,7 +47,7 @@ export function TaskCard({ task }: { task: Task }) {
           id={moveId}
           value={task.status}
           onChange={(e) => dispatch({ type: "MOVE", id: task.id, status: e.target.value as Status })}
-          className="border border-line bg-transparent px-1 py-0.5 text-[11px] text-dim focus:border-accent focus:outline-none"
+          className="border border-line bg-transparent px-1 py-0.5 text-xs text-dim focus:border-accent focus:outline-none"
         >
           {STATUSES.map((s) => (
             <option key={s.value} value={s.value}>
@@ -61,11 +61,11 @@ export function TaskCard({ task }: { task: Task }) {
             setEditing(true);
             dialogRef.current?.showModal();
           }}
-          className="ml-auto text-[11px] text-dim hover:text-ink"
+          className="ml-auto text-xs text-dim hover:text-ink"
         >
           Edit
         </button>
-        <button type="button" onClick={handleDelete} className="text-[11px] text-dim hover:text-red-400">
+        <button type="button" onClick={handleDelete} className="text-xs text-dim hover:text-red-400">
           Delete
         </button>
       </div>
@@ -76,7 +76,7 @@ export function TaskCard({ task }: { task: Task }) {
         onClose={() => setEditing(false)}
         className="m-auto w-full max-w-sm border border-line bg-panel p-4 text-ink backdrop:bg-black/60 backdrop:backdrop-blur-[2px]"
       >
-        <h2 className="mb-3 text-sm font-semibold tracking-tight">Edit task</h2>
+        <h2 className="mb-3 text-base font-semibold tracking-tight">Edit task</h2>
         {editing && <TaskForm task={task} onClose={() => dialogRef.current?.close()} />}
       </dialog>
     </li>
