@@ -10,7 +10,7 @@ import { ErrorBanner } from "./components/ErrorBanner";
 
 // Inner component: useBoard/useSeedData need to run inside the provider.
 function BoardApp() {
-  const { state } = useBoard();
+  const { state, dispatch } = useBoard();
   const { loading, error, dismissError } = useSeedData();
 
   // View state — which slice of the board you're looking at, not the board itself.
@@ -45,14 +45,25 @@ function BoardApp() {
       <header className="flex items-center justify-between">
         {/* display font: Bebas Neue is naturally all-caps — sized up, spaced out */}
         <h1 className="font-display text-3xl tracking-wide">Sprint Board</h1>
-        <button
-          type="button"
-          onClick={() => dialogRef.current?.showModal()}
-          title="Shortcut: N"
-          className="bg-accent px-3 py-1.5 text-sm font-medium text-white hover:opacity-90"
-        >
-          Add task
-        </button>
+        <div className="flex gap-2">
+          {/* disabled reads straight from history length — derived, like everything else */}
+          <button
+            type="button"
+            onClick={() => dispatch({ type: "UNDO" })}
+            disabled={state.past.length === 0}
+            className="border border-line px-3 py-1.5 text-sm text-dim hover:text-ink disabled:opacity-40 disabled:hover:text-dim"
+          >
+            Undo
+          </button>
+          <button
+            type="button"
+            onClick={() => dialogRef.current?.showModal()}
+            title="Shortcut: N"
+            className="bg-accent px-3 py-1.5 text-sm font-medium text-white hover:opacity-90"
+          >
+            Add task
+          </button>
+        </div>
       </header>
 
       {error && <ErrorBanner message={error} onDismiss={dismissError} />}

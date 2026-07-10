@@ -15,8 +15,12 @@ const BoardContext = createContext<BoardContextValue | null>(null);
 
 export function BoardProvider({ children }: { children: ReactNode }) {
   // Lazy useState initializer: reads storage exactly once, on first render.
-  const [stored] = useState(() => readStorage<BoardState>(STORAGE_KEY));
-  const [state, dispatch] = useReducer(boardReducer, stored ?? { tasks: [] });
+  // Partial: data saved before the undo feature has no `past` — default each field.
+  const [stored] = useState(() => readStorage<Partial<BoardState>>(STORAGE_KEY));
+  const [state, dispatch] = useReducer(boardReducer, {
+    tasks: stored?.tasks ?? [],
+    past: stored?.past ?? [],
+  });
 
   // Persist every state change back to storage.
   useLocalStorage(STORAGE_KEY, state);

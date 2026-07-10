@@ -1,6 +1,6 @@
 # Sprint Board
 
-A small team task board — three columns (To Do / In Progress / Done), add/edit/delete tasks, move between columns, combined priority + assignee filters, debounced title search, and localStorage persistence. Press **N** anywhere to open the add-task dialog.
+A small team task board — three columns (To Do / In Progress / Done), add/edit/delete tasks, move between columns, combined priority + assignee filters, debounced title search, and localStorage persistence. Press **N** anywhere to open the add-task dialog; **Undo** in the header reverts the last board action (up to 20 steps).
 
 **Live:** https://sprint-board-ruby.vercel.app
 
@@ -40,7 +40,7 @@ Empty board and empty columns, long unbroken titles (flex `min-w-0` + `break-wor
 
 ## With more time
 
-- **Undo last action** — the reducer makes this cheap (keep previous state, add an `UNDO` action); it could then replace the delete-confirm dialog.
-- **More tests** — the filter/search logic is covered; `boardReducer` is pure and would be next.
+- **Redo** — undo keeps a history stack; a `future` stack mirroring it would complete the pair.
+- **More tests** — filter/search and the reducer's undo path are covered; the remaining reducer actions would be next.
 - **Swap localStorage for my sprint-board-api** so boards are shared between users.
 - Native HTML5 drag-and-drop on top of the move dropdown (keeping the dropdown as the accessible fallback).
