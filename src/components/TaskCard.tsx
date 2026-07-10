@@ -20,10 +20,8 @@ export function TaskCard({ task }: { task: Task }) {
   const [editing, setEditing] = useState(false);
   const moveId = useId();
 
-  function handleDelete() {
-    // Native confirm: one line of guard against misclicks; a styled dialog + undo is the "more time" upgrade.
-    if (window.confirm("Delete this task?")) dispatch({ type: "DELETE", id: task.id });
-  }
+  // Separate small dialog guards against misclick deletes (replaces window.confirm).
+  const deleteRef = useRef<HTMLDialogElement>(null);
 
   return (
     <li className="flex flex-col gap-2 border border-line bg-card p-3 transition-colors hover:border-line-bright">
@@ -65,7 +63,11 @@ export function TaskCard({ task }: { task: Task }) {
         >
           Edit
         </button>
-        <button type="button" onClick={handleDelete} className="text-xs text-dim hover:text-red-400">
+        <button
+          type="button"
+          onClick={() => deleteRef.current?.showModal()}
+          className="text-xs text-dim hover:text-red-400"
+        >
           Delete
         </button>
       </div>
@@ -78,6 +80,33 @@ export function TaskCard({ task }: { task: Task }) {
       >
         <h2 className="mb-3 text-base font-semibold tracking-tight">Edit task</h2>
         {editing && <TaskForm task={task} onClose={() => dialogRef.current?.close()} />}
+      </dialog>
+
+      {/* delete confirm — Cancel is first so it takes the dialog's initial focus (safe default) */}
+      <dialog
+        ref={deleteRef}
+        className="m-auto w-full max-w-xs border border-line bg-panel p-4 text-ink backdrop:bg-black/60 backdrop:backdrop-blur-[2px]"
+      >
+        <p className="text-sm">
+          Delete “<span className="font-medium">{task.title}</span>”?
+        </p>
+        <div className="mt-3 flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={() => deleteRef.current?.close()}
+            className="border border-line px-3 py-1.5 text-sm text-dim hover:text-ink"
+          >
+            Cancel
+          </button>
+          {/* deleting unmounts the card; the open dialog is removed with it — no close() needed */}
+          <button
+            type="button"
+            onClick={() => dispatch({ type: "DELETE", id: task.id })}
+            className="bg-red-600 px-3 py-1.5 text-sm font-medium text-white hover:opacity-90"
+          >
+            Delete
+          </button>
+        </div>
       </dialog>
     </li>
   );
