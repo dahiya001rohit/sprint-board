@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BoardProvider, useBoard } from "./context/BoardContext";
 import { useSeedData } from "./hooks/useSeedData";
 import { useDebounce } from "./hooks/useDebounce";
@@ -24,6 +24,21 @@ function BoardApp() {
   // no React state and no re-render needed to toggle it.
   const dialogRef = useRef<HTMLDialogElement>(null);
 
+  // Stretch goal: press N to open the add-task dialog.
+  // Ignored while typing in a field or while any dialog is already open.
+  useEffect(() => {
+    function onKeydown(e: KeyboardEvent) {
+      const target = e.target as HTMLElement;
+      if (target.closest("input, textarea, select") || document.querySelector("dialog[open]")) return;
+      if (e.key.toLowerCase() === "n") {
+        e.preventDefault();
+        dialogRef.current?.showModal();
+      }
+    }
+    window.addEventListener("keydown", onKeydown);
+    return () => window.removeEventListener("keydown", onKeydown); // cleanup on unmount
+  }, []);
+
   // Container: ~90% of wide screens (capped at 1600px), full width with padding on small ones.
   return (
     <main className="mx-auto flex w-full max-w-[1600px] flex-col gap-5 p-4 md:p-8">
@@ -33,6 +48,7 @@ function BoardApp() {
         <button
           type="button"
           onClick={() => dialogRef.current?.showModal()}
+          title="Shortcut: N"
           className="bg-accent px-3 py-1.5 text-sm font-medium text-white hover:opacity-90"
         >
           Add task
