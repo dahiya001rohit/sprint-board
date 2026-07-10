@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { BoardProvider, useBoard } from "./context/BoardContext";
 import { useSeedData } from "./hooks/useSeedData";
 import { useDebounce } from "./hooks/useDebounce";
@@ -20,16 +20,30 @@ function BoardApp() {
   // Derived on every render — never stored: the only source of truth is state.tasks.
   const visible = filterTasks(state.tasks, { ...filters, search: debouncedSearch });
 
+  // Native <dialog> owns its open/closed state — a ref to call showModal()/close(),
+  // no React state and no re-render needed to toggle it.
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
   return (
     <main className="mx-auto flex max-w-5xl flex-col gap-4 p-4">
-      <h1 className="text-xl font-bold">Sprint Board</h1>
+      <header className="flex items-center justify-between">
+        <h1 className="text-xl font-bold">Sprint Board</h1>
+        <button
+          type="button"
+          onClick={() => dialogRef.current?.showModal()}
+          className="rounded bg-blue-600 px-3 py-1 text-sm text-white"
+        >
+          Add task
+        </button>
+      </header>
 
       {error && <ErrorBanner message={error} onDismiss={dismissError} />}
 
-      <section aria-label="Add task" className="rounded-lg border p-3">
+      {/* showModal() gives focus trap, Esc-to-close and ::backdrop for free */}
+      <dialog ref={dialogRef} className="m-auto w-full max-w-sm rounded-lg p-4 backdrop:bg-black/40">
         <h2 className="mb-2 text-sm font-semibold">New task</h2>
-        <TaskForm />
-      </section>
+        <TaskForm onClose={() => dialogRef.current?.close()} />
+      </dialog>
 
       <FilterBar filters={filters} assignees={uniqueAssignees(state.tasks)} onChange={setFilters} />
 
