@@ -5,9 +5,9 @@ import { TaskForm } from "./TaskForm";
 
 // Priority shown as a small colored dot + label, Linear-style.
 const PRIORITY_DOT: Record<Priority, string> = {
-  high: "bg-orange-400",
-  medium: "bg-yellow-400",
-  low: "bg-zinc-500",
+  high: "bg-red-500",
+  medium: "bg-blue-500",
+  low: "bg-green-500",
 };
 
 // One card = one task. Move is a dropdown (accessible, no drag library needed);
@@ -26,15 +26,15 @@ export function TaskCard({ task }: { task: Task }) {
   return (
     <li className="flex flex-col gap-2 border border-line bg-card p-3 transition-colors hover:border-line-bright">
       {/* min-w-0 lets the title shrink inside flex so break-words can wrap long titles */}
-      <h3 className="min-w-0 break-words text-sm font-medium leading-snug">{task.title}</h3>
-
-      {task.description && <p className="break-words text-[13px] text-dim">{task.description}</p>}
-
-      <div className="flex items-center gap-2 text-xs text-dim">
-        <span aria-hidden="true" className={`size-1.5 shrink-0 ${PRIORITY_DOT[task.priority]}`} />
-        {task.priority}
-        {task.assignee && <span className="truncate">· @{task.assignee}</span>}
+      <div className="flex items-center justify-between gap-2 text-sm">
+        <h3 className="min-w-0 break-words text-lg font-medium uppercase leading-snug">{task.title}</h3>
+        <div className="flex items-center gap-2 text-dim uppercase">
+          <span aria-hidden="true" className={`size-1.5 shrink-0 ${PRIORITY_DOT[task.priority]}`} />
+          <p>{task.priority}</p>
+        </div>
       </div>
+      {task.description && <p className="break-words text-[13px] text-dim">{task.description}</p>}
+      {task.assignee && <span className="truncate text-sm text-dim">@{task.assignee}</span>}
 
       <div className="flex items-center gap-3 border-t border-line pt-2">
         {/* sr-only: visible label would clutter the card; screen readers still get it */}
@@ -45,7 +45,7 @@ export function TaskCard({ task }: { task: Task }) {
           id={moveId}
           value={task.status}
           onChange={(e) => dispatch({ type: "MOVE", id: task.id, status: e.target.value as Status })}
-          className="border border-line bg-transparent px-1 py-0.5 text-xs text-dim focus:border-accent focus:outline-none"
+          className="border border-line bg-transparent px-1 py-0.5 text-sm text-dim focus:border-accent focus:outline-none"
         >
           {STATUSES.map((s) => (
             <option key={s.value} value={s.value}>
@@ -59,14 +59,14 @@ export function TaskCard({ task }: { task: Task }) {
             setEditing(true);
             dialogRef.current?.showModal();
           }}
-          className="ml-auto text-xs text-dim hover:text-ink"
+          className="ml-auto text-sm text-dim hover:text-ink"
         >
           Edit
         </button>
         <button
           type="button"
           onClick={() => deleteRef.current?.showModal()}
-          className="text-xs text-dim hover:text-red-400"
+          className="text-sm text-dim hover:text-red-400"
         >
           Delete
         </button>
@@ -81,7 +81,6 @@ export function TaskCard({ task }: { task: Task }) {
         <h2 className="mb-3 text-base font-semibold tracking-tight">Edit task</h2>
         {editing && <TaskForm task={task} onClose={() => dialogRef.current?.close()} />}
       </dialog>
-
       {/* delete confirm — Cancel is first so it takes the dialog's initial focus (safe default) */}
       <dialog
         ref={deleteRef}

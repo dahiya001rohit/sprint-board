@@ -13,7 +13,7 @@ interface BoardContextValue {
 // null default forces usage through the provider (useBoard throws otherwise).
 const BoardContext = createContext<BoardContextValue | null>(null);
 
-export function BoardProvider({ children }: { children: ReactNode }) {
+export function BoardProvider({ children }: { children: ReactNode }): ReactNode {
   // Lazy useState initializer: reads storage exactly once, on first render.
   // Partial: data saved before the undo feature has no `past` — default each field.
   const [stored] = useState(() => readStorage<Partial<BoardState>>(STORAGE_KEY));

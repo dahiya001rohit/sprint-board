@@ -9,15 +9,15 @@ interface ColumnProps {
 
 // Status dot per column, Linear-style: gray = todo, yellow = active, green = done.
 const STATUS_DOT: Record<Status, string> = {
-  todo: "bg-zinc-500",
-  in_progress: "bg-yellow-400",
+  todo: "bg-red-500",
+  in_progress: "bg-orange-500",
   done: "bg-green-500",
 };
 
 export function Column({ status, label, tasks }: ColumnProps) {
   return (
     <section aria-label={label} className="flex flex-col gap-2 border border-line bg-panel p-3">
-      <h2 className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-dim">
+      <h2 className="flex items-center gap-2 text-sm font-medium uppercase tracking-wider text-dim">
         <span aria-hidden="true" className={`size-1.5 ${STATUS_DOT[status]}`} />
         {label}
         {/* live count: derived from props on every render — never stored anywhere */}
